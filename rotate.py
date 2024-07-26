@@ -53,6 +53,9 @@ if __name__ == "__main__":
     arm_cmd.value = True
 
     last_req = rospy.Time.now()
+    theta = 0.5
+    angle=0
+
 
     while(not rospy.is_shutdown()):
         if(current_state.mode != "OFFBOARD" and (rospy.Time.now() - last_req) > rospy.Duration(5.0)):
@@ -68,7 +71,9 @@ if __name__ == "__main__":
                 last_req = rospy.Time.now()
             else:
                 # "an equation of a circle!"
-                rot = Rotation.from_euler('xyz', [0, 0, -90], degrees=True)
+                angle+=theta
+                if angle>=360: angle-=360
+                rot = Rotation.from_euler('xyz', [0, 0, -angle], degrees=True)
                 quat = rot.as_quat()
 
                 pose.pose.orientation.x = quat[0]
